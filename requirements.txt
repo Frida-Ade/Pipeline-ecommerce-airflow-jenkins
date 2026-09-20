@@ -1,0 +1,6 @@
+pandas
+numpy
+pymongo
+pytest
+python-dotenv
+openpyxl

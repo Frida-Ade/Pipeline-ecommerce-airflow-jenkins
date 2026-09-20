@@ -1,0 +1,73 @@
+services:
+
+  postgres:
+    image: postgres:15
+
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+
+    ports:
+      - "5432:5432"
+
+  jenkins:
+    image: jenkins/jenkins:lts
+
+    ports:
+      - "8081:8080"
+
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+  mongodb:
+    image: mongo:7
+
+    container_name: mongodb
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongo_data:/data/db
+
+  airflow-webserver:
+    image: apache/airflow:2.9.3
+
+    depends_on:
+      - postgres
+
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+      - ./scripts:/opt/airflow/scripts
+
+    command: webserver
+
+    ports:
+      - "8080:8080"
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.3
+
+    depends_on:
+      - postgres
+
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/airflow/data
+      - ./scripts:/opt/airflow/scripts
+
+    command: scheduler
+
+volumes:
+  mongo_data:
+  jenkins_home:
