@@ -20,13 +20,6 @@ Tous les services sont conteneurisés avec Docker Compose (Jenkins, Airflow, Mon
 
 ## Structure du projet
 
-- **dags/** — `ecommerce_sales_pipeline.py` (DAG principal)
-- **data/** — `raw/` (données brutes) et `processed/` (données transformées)
-- **scripts/** — `process_data.py`, `calculate_kpis.py`, `mongodb_loader.py`, `check_mongodb.py`
-- **tests/** — `test_pipeline.py`
-- **Jenkinsfile**, **docker-compose.yml**, **requirements.txt**
-
-
 ```text
 airflow-ecommerce-project/
 ├── dags/
